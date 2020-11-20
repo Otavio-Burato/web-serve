@@ -1,7 +1,8 @@
 use actix_web::{get, web, App, HttpServer, Responder};
+use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct Response {
     echo: String,
 }
@@ -15,6 +16,8 @@ async fn main() -> std::io::Result<()> {
 }
 
 #[get("/")]
-async fn home(req: String) -> impl Responder {
-    web::Json(Response { echo: req })
+async fn home(req: web::Json<Response>) -> impl Responder {
+    web::Json(Response {
+        echo: req.echo.clone(),
+    })
 }
